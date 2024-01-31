@@ -1,14 +1,14 @@
 import 'package:blacknote/style/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class RegisterView extends StatefulWidget {
-  const RegisterView({super.key});
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
 
   @override
-  State<RegisterView> createState() => _RegisterViewState();
+  State<LoginView> createState() => _LoginViewState();
 }
 
-class _RegisterViewState extends State<RegisterView> {
+class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +20,7 @@ class _RegisterViewState extends State<RegisterView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                'Register',
+                'Login',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 43,
@@ -100,10 +100,10 @@ class _RegisterViewState extends State<RegisterView> {
               ),
               TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, './login/');
+                    Navigator.pushNamed(context, './register/');
                   },
                   child: const Text(
-                    'If you already have an account, login!',
+                    'If you do not have an account, register!',
                     style: TextStyle(
                         color: AppStyles.backgroundColorWhite, fontSize: 23),
                     textAlign: TextAlign.center,
