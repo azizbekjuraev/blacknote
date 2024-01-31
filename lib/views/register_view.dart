@@ -71,11 +71,11 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ),
               const SizedBox(
-                height: 53,
+                height: 43,
               ),
               SizedBox(
                 width: double.infinity,
-                height: 38,
+                height: 50,
                 child: ElevatedButton(
                   style: ButtonStyle(
                     backgroundColor: const MaterialStatePropertyAll(
