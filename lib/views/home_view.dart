@@ -1,5 +1,6 @@
 import 'package:blacknote/style/app_styles.dart';
 import 'package:flutter/material.dart';
+import '../widgets/reusable_icon_button.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -13,6 +14,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 60,
         backgroundColor: Colors.transparent,
         title: const Text(
           'Notes',
@@ -22,13 +24,16 @@ class _HomeViewState extends State<HomeView> {
               fontSize: 43),
         ),
         actions: [
-          IconButton(
-            icon: Image.asset('assets/search_icon.png'),
+          ReusableIconButton(
+            iconData: Icons.search,
             onPressed: () {},
           ),
-          IconButton(
-            icon: Image.asset('assets/disclaimer_icon.png'),
-            onPressed: () {},
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ReusableIconButton(
+              iconData: Icons.info_outline,
+              onPressed: () {},
+            ),
           ),
         ],
       ),
@@ -55,7 +60,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           Positioned(
             bottom: 60.0,
-            right: 10,
+            right: 20,
             child: SizedBox(
               width: 70,
               height: 70,

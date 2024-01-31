@@ -1,4 +1,5 @@
 import 'package:blacknote/style/app_styles.dart';
+import 'package:blacknote/views/search_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import './views/register_view.dart';
@@ -16,6 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           scaffoldBackgroundColor: AppStyles.primaryBgColor,
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const CreateView(),
+        home: const SearchView(),
         routes: {
           './login/': (context) => const LoginView(),
           './register/': (context) => const RegisterView(),

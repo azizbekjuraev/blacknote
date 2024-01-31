@@ -11,6 +11,7 @@ class AppStyles {
   static const Color bgColorBlack = Colors.black;
   static const Color foregroundColorRed = Colors.redAccent;
   static const Color foregroundColorBlue = Colors.blueAccent;
-  static const Color primaryBgColor = Color.fromARGB(59, 59, 59, 0);
-  static const Color secondaryBgColor = Color.fromARGB(37, 37, 37, 0);
+  static const Color primaryBgColor = Color.fromARGB(59, 59, 59, 59);
+  static const Color secondaryBgColor = Color.fromARGB(37, 37, 37, 37);
+  static const Color primaryTextColor = Color.fromARGB(154, 154, 154, 154);
 }

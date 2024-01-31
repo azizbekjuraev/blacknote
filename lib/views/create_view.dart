@@ -1,4 +1,6 @@
 import 'package:blacknote/style/app_styles.dart';
+import 'package:blacknote/widgets/custom_text_field.dart';
+import 'package:blacknote/widgets/reusable_icon_button.dart';
 import 'package:flutter/material.dart';
 
 class CreateView extends StatefulWidget {
@@ -13,25 +15,47 @@ class _CreateViewState extends State<CreateView> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          toolbarHeight: 60,
           backgroundColor: Colors.transparent,
-          title: const Text(
-            'Notes',
-            style: TextStyle(
-                color: AppStyles.backgroundColorWhite,
-                fontWeight: FontWeight.bold,
-                fontSize: 43),
+          surfaceTintColor: Colors.transparent,
+          title: ReusableIconButton(
+            iconData: Icons.chevron_left_outlined,
+            onPressed: () {},
           ),
           actions: [
-            IconButton(
-              icon: Image.asset('assets/see_icon.png'),
+            ReusableIconButton(
+              iconData: Icons.remove_red_eye_outlined,
               onPressed: () {},
             ),
-            IconButton(
-              icon: Image.asset('assets/disclaimer_icon.png'),
-              onPressed: () {},
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ReusableIconButton(
+                iconData: Icons.save_outlined,
+                onPressed: () {},
+              ),
             ),
           ],
         ),
-        body: Container());
+        body: const Padding(
+          padding: EdgeInsets.all(20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                CustomTextField(
+                  maxLength: 100,
+                  maxLines: null,
+                  autofocus: true,
+                  hintText: 'Title',
+                  fontSize: 35,
+                ),
+                CustomTextField(
+                  maxLines: null,
+                  hintText: 'Type something...',
+                  fontSize: 23,
+                ),
+              ],
+            ),
+          ),
+        ));
   }
 }
