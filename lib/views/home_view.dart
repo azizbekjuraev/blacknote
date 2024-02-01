@@ -14,6 +14,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 60,
         backgroundColor: Colors.transparent,
         title: const Text(

@@ -26,13 +26,18 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           scaffoldBackgroundColor: AppStyles.primaryBgColor,
           textTheme: GoogleFonts.nunitoTextTheme(),
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: AppStyles.primaryBgColor,
+            primary: AppStyles.buttonBgColorGreen,
+            // secondary: Colors.red,
+          ),
           useMaterial3: true,
         ),
         home: const LoginView(),
         routes: {
           './login/': (context) => const LoginView(),
           './register/': (context) => const RegisterView(),
+          './home-view/': (context) => const HomeView(),
         });
   }
 }

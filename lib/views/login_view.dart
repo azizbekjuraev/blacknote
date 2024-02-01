@@ -15,6 +15,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _email;
   late final TextEditingController _password;
   bool isLoading = false;
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -40,80 +41,79 @@ class _LoginViewState extends State<LoginView> {
       final String password = _password.text;
 
       if (email.isEmpty) {
-        showAlertDialog(context, 'Elektron pochtangizni kiriting...',
-            toastType: ToastificationType.warning);
+        showAlertDialog(context, 'Enter your email...',
+            toastType: ToastificationType.warning,
+            iconColor: AppStyles.foregroundColorYellow);
         return;
       } else if (password.isEmpty) {
-        showAlertDialog(context, 'Parolingizni kiriting....',
-            toastType: ToastificationType.warning);
+        showAlertDialog(context, 'Enter your password...',
+            toastType: ToastificationType.warning,
+            iconColor: AppStyles.foregroundColorYellow);
         return;
       }
-      // Move the actual sign-in code inside the try block
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      // UserData.setEmail(email);
+      debugPrint('Logged user id: ${userCredential.user!.uid}');
 
-      // on success
       if (!context.mounted) return;
       showAlertDialog(
           context,
-          title: "Xush kelibsiz!",
-          "Tizimga admin bo'lib kirdingiz...",
+          title: "Welcome!",
+          "You are successfully logged in!",
           toastType: ToastificationType.success,
+          iconColor: AppStyles.buttonBgColorGreen,
           toastAlignment: Alignment.bottomCenter,
-          margin: const EdgeInsets.only(bottom: 35.0));
-
-      Navigator.pop(context);
+          margin: const EdgeInsets.only(bottom: 0.0));
+      Navigator.pushReplacementNamed(context, './home-view/');
     } on FirebaseAuthException catch (e) {
-      // Handle specific FirebaseAuthExceptions
       if (e.code == 'too-many-requests') {
         if (!context.mounted) return;
         showAlertDialog(
           context,
-          "Juda koʻp so'rovlar yubordingiz, parolni tekshirib, qaytadan urinib ko'ring...",
+          "You have sent too many requests, please check your password and try again...",
         );
       }
       if (e.code == 'invalid-email') {
         if (!context.mounted) return;
         showAlertDialog(
           context,
-          "Iltimos, elektron pochtani to'g'ri to'ldiring...",
+          "Please fill in the correct email...",
         );
       }
       if (e.code == 'invalid-credential') {
         if (!context.mounted) return;
         showAlertDialog(
           context,
-          "Parolni to'g'ri to'ldiring...",
+          "Please enter the correct password...",
         );
       }
       if (e.code == 'user-not-found') {
         if (!context.mounted) return;
-        showAlertDialog(context, 'Foydalanuvchi topilmadi...');
+        showAlertDialog(context, 'User not found...');
       } else if (e.code == 'wrong-password') {
         if (!context.mounted) return;
         showAlertDialog(
           context,
-          "Parolingiz noto'g'ri, qayta urinib ko'ring...",
+          "Your password is incorrect, please try again...",
         );
       } else if (e.code == 'network-request-failed') {
         if (!context.mounted) return;
         showAlertDialog(
           context,
-          "Sizda to'g'ri tarmoq ulanishi yo'q...",
+          "You do not have the correct network connection...",
         );
       } else if (e.code == 'email-already-in-use') {
         if (!context.mounted) return;
         showAlertDialog(
           context,
-          'Bu E-pochta manzili allaqachon boshqa hisobda ishlatilmoqda...',
+          'This email address is already in use by another account...',
         );
       } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         if (!context.mounted) return;
-        showAlertDialog(
-            context, "Elektron pochta yoki parol noto'g'ri kiritildi...");
+        showAlertDialog(context, "Incorrect email or password...");
       }
     } finally {
       setState(() {
@@ -166,13 +166,26 @@ class _LoginViewState extends State<LoginView> {
               SizedBox(
                 height: 50,
                 child: TextField(
+                  obscureText: _obscureText,
                   controller: _password,
                   style: const TextStyle(color: AppStyles.backgroundColorWhite),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 30,
                     ),
-                    suffixIcon: const Icon(Icons.remove_red_eye_outlined),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _obscureText = !_obscureText;
+                        });
+                      },
+                      child: Icon(
+                        _obscureText
+                            ? Icons.remove_red_eye_outlined
+                            : Icons.remove_red_eye,
+                        color: Colors.white,
+                      ),
+                    ),
                     suffixIconColor: AppStyles.backgroundColorWhite,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(100.0),
@@ -191,25 +204,29 @@ class _LoginViewState extends State<LoginView> {
               SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: const MaterialStatePropertyAll(
-                        AppStyles.buttonBgColorGreen),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100.0),
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator.adaptive())
+                    : ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: const MaterialStatePropertyAll(
+                              AppStyles.buttonBgColorGreen),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(100.0),
+                            ),
+                          ),
+                        ),
+                        onPressed: () async {
+                          await _signInWithEmailAndPassword();
+                        },
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                              color: AppStyles.backgroundColorWhite,
+                              fontSize: 18),
+                        ),
                       ),
-                    ),
-                  ),
-                  onPressed: () async {
-                    await _signInWithEmailAndPassword();
-                  },
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                        color: AppStyles.backgroundColorWhite, fontSize: 18),
-                  ),
-                ),
               ),
               const SizedBox(
                 height: 43,
