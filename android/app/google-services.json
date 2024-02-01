@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "404786861732",
+    "firebase_url": "https://blacknote-eb29b-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "blacknote-eb29b",
+    "storage_bucket": "blacknote-eb29b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404786861732:android:cb75724a12d204c6e07831",
+        "android_client_info": {
+          "package_name": "com.example.blacknote"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnq14x9fS_-0s570HA3TWl6je9Da-QYqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

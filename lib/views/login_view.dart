@@ -140,11 +140,12 @@ class _LoginViewState extends State<LoginView> {
                     color: Colors.white),
               ),
               const SizedBox(
-                height: 41,
+                height: 43,
               ),
               SizedBox(
                 height: 50,
                 child: TextField(
+                  controller: _email,
                   style: const TextStyle(color: AppStyles.backgroundColorWhite),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 30),
@@ -165,6 +166,7 @@ class _LoginViewState extends State<LoginView> {
               SizedBox(
                 height: 50,
                 child: TextField(
+                  controller: _password,
                   style: const TextStyle(color: AppStyles.backgroundColorWhite),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
@@ -184,7 +186,7 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
               const SizedBox(
-                height: 53,
+                height: 43,
               ),
               SizedBox(
                 width: double.infinity,
@@ -199,16 +201,18 @@ class _LoginViewState extends State<LoginView> {
                       ),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    await _signInWithEmailAndPassword();
+                  },
                   child: const Text(
-                    'Register',
+                    'Login',
                     style: TextStyle(
                         color: AppStyles.backgroundColorWhite, fontSize: 18),
                   ),
                 ),
               ),
               const SizedBox(
-                height: 41,
+                height: 43,
               ),
               TextButton(
                   onPressed: () {

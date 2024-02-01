@@ -27,7 +27,7 @@ class _RegisterViewState extends State<RegisterView> {
                     color: Colors.white),
               ),
               const SizedBox(
-                height: 41,
+                height: 43,
               ),
               SizedBox(
                 height: 50,
@@ -47,7 +47,7 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ),
               const SizedBox(
-                height: 41,
+                height: 43,
               ),
               SizedBox(
                 height: 50,
@@ -96,7 +96,7 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
               ),
               const SizedBox(
-                height: 41,
+                height: 43,
               ),
               TextButton(
                   onPressed: () {
