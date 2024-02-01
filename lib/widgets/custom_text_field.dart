@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final bool autofocus;
   final String hintText;
   final double fontSize;
+  final TextEditingController controller;
 
   const CustomTextField({
     Key? key,
@@ -15,11 +16,13 @@ class CustomTextField extends StatelessWidget {
     this.autofocus = false,
     this.hintText = '',
     this.fontSize = 16.0,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       maxLength: maxLength,
       maxLines: maxLines,
       autofocus: autofocus,

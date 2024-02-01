@@ -70,7 +70,9 @@ class _HomeViewState extends State<HomeView> {
                   borderRadius: BorderRadius.circular(50.0),
                 ),
                 tooltip: 'Add new note',
-                onPressed: () async {},
+                onPressed: () {
+                  Navigator.pushNamed(context, './create-view/');
+                },
                 backgroundColor: AppStyles.primaryBgColor,
                 child: const Icon(
                   Icons.add,

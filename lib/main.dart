@@ -24,20 +24,20 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-          scaffoldBackgroundColor: AppStyles.primaryBgColor,
+          scaffoldBackgroundColor: AppStyles.bgColorBlack,
           textTheme: GoogleFonts.nunitoTextTheme(),
           colorScheme: ColorScheme.fromSeed(
             seedColor: AppStyles.primaryBgColor,
             primary: AppStyles.buttonBgColorGreen,
-            // secondary: Colors.red,
           ),
           useMaterial3: true,
         ),
-        home: const LoginView(),
+        home: const HomeView(),
         routes: {
           './login/': (context) => const LoginView(),
           './register/': (context) => const RegisterView(),
           './home-view/': (context) => const HomeView(),
+          './create-view/': (context) => const CreateView(),
         });
   }
 }
