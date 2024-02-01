@@ -43,6 +43,15 @@ class _CreateViewState extends State<CreateView> {
       DocumentReference userDocRef =
           _firestore.collection('users').doc(userUid);
 
+      // Your user data, including 'userId'
+      Map<String, dynamic> userData = {
+        'userId': userUid,
+        // Add any other fields you need for your user
+      };
+
+      // Set the user data in the 'users' collection with the user's ID as the document ID
+      await userDocRef.set(userData);
+
       // Now, create a reference to the 'notes' subcollection under the 'users' document
       CollectionReference notesCollection = userDocRef.collection('notes');
 
@@ -54,6 +63,7 @@ class _CreateViewState extends State<CreateView> {
 
       // Add the note data to the 'notes' subcollection
       await notesCollection.add(noteData);
+
       if (!context.mounted) return;
       showAlertDialog(
           context,
