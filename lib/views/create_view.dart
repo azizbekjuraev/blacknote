@@ -42,7 +42,6 @@ class _CreateViewState extends State<CreateView> {
     [255, 245, 153, 1],
     [158, 255, 255, 1],
     [182, 156, 255, 1],
-    [154, 154, 154, 154],
   ];
 
   List<int> getRandomColor(List<List<int>> colorList) {
