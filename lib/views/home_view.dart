@@ -45,20 +45,19 @@ class _HomeViewState extends State<HomeView> {
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .where('userId', isEqualTo: _auth.currentUser?.uid)
+            .doc(_auth.currentUser?.uid)
+            .collection('notes')
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // If the data is still loading, show a loading indicator
             return const Center(
               child: CircularProgressIndicator.adaptive(),
             );
           } else if (snapshot.hasError) {
-            // If there's an error, display an error message
             return Center(
               child: Text('Error: ${snapshot.error}'),
             );
-          } else if (snapshot.data?.docs.isEmpty ?? true) {
+          } else if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             // If there are no notes, show Align widget
             return Stack(
               children: [
@@ -111,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
             // If there are notes, show DisplayNotesUI widget
             return Stack(
               children: [
-                DisplayNotesUI(),
+                const DisplayNotesUI(),
                 Positioned(
                   bottom: 60.0,
                   right: 20,

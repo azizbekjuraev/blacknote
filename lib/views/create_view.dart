@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:blacknote/style/app_styles.dart';
 import 'package:blacknote/utils/alert_dialogue.dart';
 import 'package:blacknote/widgets/custom_text_field.dart';
@@ -34,6 +36,27 @@ class _CreateViewState extends State<CreateView> {
     super.dispose();
   }
 
+  List<List<int>> myColors = [
+    [255, 158, 158, 1],
+    [145, 244, 143, 1],
+    [255, 245, 153, 1],
+    [158, 255, 255, 1],
+    [182, 156, 255, 1],
+    [154, 154, 154, 154],
+  ];
+
+  List<int> getRandomColor(List<List<int>> colorList) {
+    if (colorList.isEmpty) {
+      throw Exception("Color list is empty");
+    }
+
+    // Generate a random index within the range of the colorList
+    final randomIndex = Random().nextInt(colorList.length);
+
+    // Return the random color as a list of integers
+    return colorList[randomIndex];
+  }
+
   Future<void> addNote() async {
     try {
       setState(() {
@@ -55,14 +78,26 @@ class _CreateViewState extends State<CreateView> {
       // Now, create a reference to the 'notes' subcollection under the 'users' document
       CollectionReference notesCollection = userDocRef.collection('notes');
 
-      // Your note data, you may need to replace this with your actual note structure
-      Map<String, dynamic> noteData = {
-        'title': _title.text,
-        'content': _content.text,
-      };
+      if (_title.text == "" || _content.text == "") {
+        if (!context.mounted) return;
+        showAlertDialog(
+            context,
+            title: "Error!",
+            "Title and type fields can't be empty!",
+            toastAlignment: Alignment.bottomCenter,
+            margin: const EdgeInsets.only(bottom: 0.0));
+        return;
+      } else {
+        List<int> randomColor = getRandomColor(myColors);
+        Map<String, dynamic> noteData = {
+          'title': _title.text,
+          'content': _content.text,
+          'container_color': randomColor,
+        };
 
-      // Add the note data to the 'notes' subcollection
-      await notesCollection.add(noteData);
+        // Add the note data to the 'notes' subcollection
+        await notesCollection.add(noteData);
+      }
 
       if (!context.mounted) return;
       showAlertDialog(
