@@ -1,5 +1,5 @@
-import 'dart:math';
 import 'package:blacknote/style/app_styles.dart';
+import 'package:blacknote/utils/show_alert.dart';
 import 'package:blacknote/utils/show_toast.dart';
 import 'package:blacknote/widgets/custom_text_field.dart';
 import 'package:blacknote/widgets/reusable_icon_button.dart';
@@ -8,23 +8,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
 
-class CreateView extends StatefulWidget {
-  const CreateView({super.key});
+class EditView extends StatefulWidget {
+  final List<String>? noteData;
+  const EditView({super.key, this.noteData});
 
   @override
-  State<CreateView> createState() => _CreateViewState();
+  State<EditView> createState() => _EditViewState();
 }
 
-class _CreateViewState extends State<CreateView> {
+class _EditViewState extends State<EditView> {
   bool isLoading = false;
+  bool isEditing = false;
   late final TextEditingController _title;
   late final TextEditingController _content;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  late final String originalTitle;
+  late final String originalContent;
 
   @override
   void initState() {
-    _title = TextEditingController();
-    _content = TextEditingController();
+    _title = TextEditingController(text: widget.noteData?[0]);
+    _content = TextEditingController(text: widget.noteData?[1]);
+    originalTitle = widget.noteData?[0] ?? "";
+    originalContent = widget.noteData?[1] ?? "";
     super.initState();
   }
 
@@ -35,76 +40,35 @@ class _CreateViewState extends State<CreateView> {
     super.dispose();
   }
 
-  List<List<int>> myColors = [
-    [255, 158, 158, 1],
-    [145, 244, 143, 1],
-    [255, 245, 153, 1],
-    [158, 255, 255, 1],
-    [182, 156, 255, 1],
-  ];
-
-  List<int> getRandomColor(List<List<int>> colorList) {
-    if (colorList.isEmpty) {
-      throw Exception("Color list is empty");
-    }
-
-    // Generate a random index within the range of the colorList
-    final randomIndex = Random().nextInt(colorList.length);
-
-    // Return the random color as a list of integers
-    return colorList[randomIndex];
+  bool isNoteChanged() {
+    return _title.text != originalTitle || _content.text != originalContent;
   }
 
-  Future<void> addNote() async {
+  Future<void> updateNote() async {
     try {
       if (!context.mounted) return;
       FocusScope.of(context).unfocus();
 
+      isNoteChanged();
+      if (!isNoteChanged()) return;
+
       setState(() {
         isLoading = true;
       });
+
       String userUid = FirebaseAuth.instance.currentUser!.uid;
-      DocumentReference userDocRef =
-          _firestore.collection('users').doc(userUid);
-
-      // Your user data, including 'userId'
-      Map<String, dynamic> userData = {
-        'userId': userUid,
-        // Add any other fields you need for your user
-      };
-
-      // Set the user data in the 'users' collection with the user's ID as the document ID
-      await userDocRef.set(userData);
-
-      // Now, create a reference to the 'notes' subcollection under the 'users' document
-      CollectionReference notesCollection = userDocRef.collection('notes');
-
-      if (_title.text == "" || _content.text == "") {
-        if (!context.mounted) return;
-        showToast(
-            context,
-            title: "Error!",
-            "Title and type fields can't be empty!",
-            toastAlignment: Alignment.bottomCenter,
-            margin: const EdgeInsets.only(bottom: 0.0));
-        return;
-      } else {
-        List<int> randomColor = getRandomColor(myColors);
-        Map<String, dynamic> noteData = {
-          'title': _title.text,
-          'content': _content.text,
-          'container_color': randomColor,
-        };
-
-        // Add the note data to the 'notes' subcollection
-        await notesCollection.add(noteData);
-      }
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUid)
+          .collection('notes')
+          .doc(widget.noteData?[2])
+          .update({'title': _title.text, 'content': _content.text});
 
       if (!context.mounted) return;
       showToast(
           context,
           title: "Great!",
-          "You have added a new note!",
+          "You have successfully edited your note!",
           toastType: ToastificationType.success,
           iconColor: AppStyles.buttonBgColorGreen,
           toastAlignment: Alignment.bottomCenter,
@@ -130,20 +94,33 @@ class _CreateViewState extends State<CreateView> {
           title: ReusableIconButton(
             iconData: Icons.chevron_left_outlined,
             onPressed: () {
-              Navigator.pop(context);
+              if (!isNoteChanged()) {
+                return Navigator.pop(context);
+              } else {
+                showAlert(context,
+                    title: 'Are your sure you want discard your changes ?');
+              }
             },
           ),
           actions: [
             ReusableIconButton(
-              iconData: Icons.remove_red_eye_outlined,
-              onPressed: () {},
+              iconData: isEditing ? Icons.remove_red_eye_outlined : Icons.edit,
+              onPressed: () {
+                setState(() {
+                  isEditing = !isEditing;
+                });
+              },
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ReusableIconButton(
                 iconData: Icons.save_outlined,
                 onPressed: () async {
-                  await addNote();
+                  // await updateNote();
+                  if (isEditing) {
+                    showAlert(context,
+                        updateNote: updateNote, greenBtnText: 'Save');
+                  }
                 },
               ),
             ),
@@ -157,6 +134,7 @@ class _CreateViewState extends State<CreateView> {
                 child: Column(
                   children: [
                     CustomTextField(
+                      readOnly: isEditing ? false : true,
                       controller: _title,
                       maxLength: 100,
                       maxLines: null,
@@ -165,6 +143,7 @@ class _CreateViewState extends State<CreateView> {
                       fontSize: 35,
                     ),
                     CustomTextField(
+                      readOnly: isEditing ? false : true,
                       controller: _content,
                       maxLines: null,
                       hintText: 'Type something...',
@@ -174,7 +153,6 @@ class _CreateViewState extends State<CreateView> {
                 ),
               ),
             ),
-            // Loading Indicator and Dim Background
             if (isLoading)
               const Center(
                 child: CircularProgressIndicator.adaptive(),

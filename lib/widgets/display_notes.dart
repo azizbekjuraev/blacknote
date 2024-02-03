@@ -1,4 +1,5 @@
 import 'package:blacknote/style/app_styles.dart';
+import 'package:blacknote/views/edit_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,6 @@ class DisplayNotesUI extends StatelessWidget {
                           colorValues[2].toInt(),
                           colorValues[3],
                         );
-
                         return Dismissible(
                           key: Key('${notes[index]['title']}'),
                           direction: DismissDirection.endToStart,
@@ -69,6 +69,20 @@ class DisplayNotesUI extends StatelessWidget {
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
                               child: ListTile(
+                                onTap: () {
+                                  String documentId =
+                                      snapshot.data!.docs[index].id;
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EditView(noteData: [
+                                        notes[index]['title'],
+                                        notes[index]['content'],
+                                        documentId,
+                                      ]),
+                                    ),
+                                  );
+                                },
                                 title: Text(
                                   '${notes[index]['title']}',
                                   style: const TextStyle(
@@ -148,7 +162,6 @@ class DisplayNotesUI extends StatelessWidget {
                       .collection('notes')
                       .doc(noteId)
                       .delete();
-
                   isDeleted = true;
                 },
                 child: const Text(

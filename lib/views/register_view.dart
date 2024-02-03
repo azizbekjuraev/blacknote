@@ -1,5 +1,6 @@
+import 'package:blacknote/state/shared_preferences.dart';
 import 'package:blacknote/style/app_styles.dart';
-import 'package:blacknote/utils/alert_dialogue.dart';
+import 'package:blacknote/utils/show_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
@@ -44,12 +45,12 @@ class _RegisterViewState extends State<RegisterView> {
       final String password = _password.text;
 
       if (email.isEmpty) {
-        showAlertDialog(context, 'Enter your email...',
+        showToast(context, 'Enter your email...',
             toastType: ToastificationType.warning,
             iconColor: AppStyles.foregroundColorYellow);
         return;
       } else if (password.isEmpty) {
-        showAlertDialog(context, 'Enter your password...',
+        showToast(context, 'Enter your password...',
             toastType: ToastificationType.warning,
             iconColor: AppStyles.foregroundColorYellow);
         return;
@@ -64,7 +65,7 @@ class _RegisterViewState extends State<RegisterView> {
 
       // on success
       if (!context.mounted) return;
-      showAlertDialog(
+      showToast(
           context,
           title: "Welcome!",
           "You are successfully registered!",
@@ -73,54 +74,55 @@ class _RegisterViewState extends State<RegisterView> {
           toastAlignment: Alignment.bottomCenter,
           margin: const EdgeInsets.only(bottom: 0.0));
 
+      SharedPreferencesHelper.setLoggedIn(true);
       Navigator.pushReplacementNamed(context, './home-view/');
     } on FirebaseAuthException catch (e) {
       // Handle specific FirebaseAuthExceptions
       if (e.code == 'too-many-requests') {
         if (!context.mounted) return;
-        showAlertDialog(
+        showToast(
           context,
           "You have sent too many requests, please check your password and try again...",
         );
       }
       if (e.code == 'invalid-email') {
         if (!context.mounted) return;
-        showAlertDialog(
+        showToast(
           context,
           "Please fill in the correct email...",
         );
       }
       if (e.code == 'invalid-credential') {
         if (!context.mounted) return;
-        showAlertDialog(
+        showToast(
           context,
           "Please enter the correct password...",
         );
       }
       if (e.code == 'user-not-found') {
         if (!context.mounted) return;
-        showAlertDialog(context, 'User not found...');
+        showToast(context, 'User not found...');
       } else if (e.code == 'wrong-password') {
         if (!context.mounted) return;
-        showAlertDialog(
+        showToast(
           context,
           "Your password is incorrect, please try again...",
         );
       } else if (e.code == 'network-request-failed') {
         if (!context.mounted) return;
-        showAlertDialog(
+        showToast(
           context,
           "You do not have the correct network connection...",
         );
       } else if (e.code == 'email-already-in-use') {
         if (!context.mounted) return;
-        showAlertDialog(
+        showToast(
           context,
           'This email address is already in use by another account...',
         );
       } else if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         if (!context.mounted) return;
-        showAlertDialog(context, "Incorrect email or password...");
+        showToast(context, "Incorrect email or password...");
       }
     } finally {
       setState(() {
