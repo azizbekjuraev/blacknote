@@ -1,3 +1,4 @@
+import 'package:blacknote/state/shared_preferences.dart';
 import 'package:blacknote/style/app_styles.dart';
 import 'package:blacknote/utils/alert_dialogue.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +34,9 @@ class _LoginViewState extends State<LoginView> {
 
   Future<void> _signInWithEmailAndPassword() async {
     try {
+      if (!context.mounted) return;
+      FocusScope.of(context).unfocus();
+
       setState(() {
         isLoading = true;
       });
@@ -67,6 +71,7 @@ class _LoginViewState extends State<LoginView> {
           iconColor: AppStyles.buttonBgColorGreen,
           toastAlignment: Alignment.bottomCenter,
           margin: const EdgeInsets.only(bottom: 0.0));
+      SharedPreferencesHelper.setLoggedIn(true);
       Navigator.pushReplacementNamed(context, './home-view/');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'too-many-requests') {
@@ -129,119 +134,125 @@ class _LoginViewState extends State<LoginView> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Login',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 43,
-                    color: Colors.white),
-              ),
-              const SizedBox(
-                height: 43,
-              ),
-              SizedBox(
-                height: 50,
-                child: TextField(
-                  controller: _email,
-                  style: const TextStyle(color: AppStyles.backgroundColorWhite),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 30),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                    ),
-                    filled: true,
-                    hintStyle:
-                        const TextStyle(color: AppStyles.backgroundColorWhite),
-                    hintText: "email",
-                    fillColor: AppStyles.primaryBgColor,
-                  ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Login',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 43,
+                      color: Colors.white),
                 ),
-              ),
-              const SizedBox(
-                height: 43,
-              ),
-              SizedBox(
-                height: 50,
-                child: TextField(
-                  obscureText: _obscureText,
-                  controller: _password,
-                  style: const TextStyle(color: AppStyles.backgroundColorWhite),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                    ),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      child: Icon(
-                        _obscureText
-                            ? Icons.remove_red_eye_outlined
-                            : Icons.remove_red_eye,
-                        color: Colors.white,
+                const SizedBox(
+                  height: 43,
+                ),
+                SizedBox(
+                  height: 50,
+                  child: TextField(
+                    controller: _email,
+                    style:
+                        const TextStyle(color: AppStyles.backgroundColorWhite),
+                    decoration: InputDecoration(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 30),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100.0),
                       ),
+                      filled: true,
+                      hintStyle: const TextStyle(
+                          color: AppStyles.backgroundColorWhite),
+                      hintText: "email",
+                      fillColor: AppStyles.primaryBgColor,
                     ),
-                    suffixIconColor: AppStyles.backgroundColorWhite,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                    ),
-                    filled: true,
-                    hintStyle:
-                        const TextStyle(color: AppStyles.backgroundColorWhite),
-                    hintText: "password",
-                    fillColor: AppStyles.primaryBgColor,
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 43,
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: isLoading
-                    ? const Center(child: CircularProgressIndicator.adaptive())
-                    : ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: const MaterialStatePropertyAll(
-                              AppStyles.buttonBgColorGreen),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100.0),
+                const SizedBox(
+                  height: 43,
+                ),
+                SizedBox(
+                  height: 50,
+                  child: TextField(
+                    obscureText: _obscureText,
+                    controller: _password,
+                    style:
+                        const TextStyle(color: AppStyles.backgroundColorWhite),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                        child: Icon(
+                          _obscureText
+                              ? Icons.remove_red_eye_outlined
+                              : Icons.remove_red_eye,
+                          color: Colors.white,
+                        ),
+                      ),
+                      suffixIconColor: AppStyles.backgroundColorWhite,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100.0),
+                      ),
+                      filled: true,
+                      hintStyle: const TextStyle(
+                          color: AppStyles.backgroundColorWhite),
+                      hintText: "password",
+                      fillColor: AppStyles.primaryBgColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 43,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator.adaptive())
+                      : ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: const MaterialStatePropertyAll(
+                                AppStyles.buttonBgColorGreen),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100.0),
+                              ),
                             ),
                           ),
+                          onPressed: () async {
+                            await _signInWithEmailAndPassword();
+                          },
+                          child: const Text(
+                            'Login',
+                            style: TextStyle(
+                                color: AppStyles.backgroundColorWhite,
+                                fontSize: 18),
+                          ),
                         ),
-                        onPressed: () async {
-                          await _signInWithEmailAndPassword();
-                        },
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
-                              color: AppStyles.backgroundColorWhite,
-                              fontSize: 18),
-                        ),
-                      ),
-              ),
-              const SizedBox(
-                height: 43,
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, './register/');
-                  },
-                  child: const Text(
-                    'If you do not have an account, register!',
-                    style: TextStyle(
-                        color: AppStyles.backgroundColorWhite, fontSize: 23),
-                    textAlign: TextAlign.center,
-                  ))
-            ],
+                ),
+                const SizedBox(
+                  height: 43,
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, './register/');
+                    },
+                    child: const Text(
+                      'If you do not have an account, register!',
+                      style: TextStyle(
+                          color: AppStyles.backgroundColorWhite, fontSize: 23),
+                      textAlign: TextAlign.center,
+                    ))
+              ],
+            ),
           ),
         ),
       ),

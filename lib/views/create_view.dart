@@ -58,6 +58,9 @@ class _CreateViewState extends State<CreateView> {
 
   Future<void> addNote() async {
     try {
+      if (!context.mounted) return;
+      FocusScope.of(context).unfocus();
+
       setState(() {
         isLoading = true;
       });

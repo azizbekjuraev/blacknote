@@ -33,6 +33,9 @@ class _RegisterViewState extends State<RegisterView> {
 
   Future<void> _registerUser() async {
     try {
+      if (!context.mounted) return;
+      FocusScope.of(context).unfocus();
+
       setState(() {
         isLoading = true;
       });
@@ -133,122 +136,127 @@ class _RegisterViewState extends State<RegisterView> {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Register',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 43,
-                    color: Colors.white),
-              ),
-              const SizedBox(
-                height: 43,
-              ),
-              SizedBox(
-                height: 50,
-                child: TextField(
-                  controller: _email,
-                  style: const TextStyle(color: AppStyles.backgroundColorWhite),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 30),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                    ),
-                    filled: true,
-                    hintStyle:
-                        const TextStyle(color: AppStyles.backgroundColorWhite),
-                    hintText: "email",
-                    fillColor: AppStyles.primaryBgColor,
-                  ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  'Register',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 43,
+                      color: Colors.white),
                 ),
-              ),
-              const SizedBox(
-                height: 43,
-              ),
-              SizedBox(
-                height: 50,
-                child: TextField(
-                  obscureText: _obscureText,
-                  controller: _password,
-                  style: const TextStyle(color: AppStyles.backgroundColorWhite),
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 30,
-                    ),
-                    suffixIcon: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      child: Icon(
-                        _obscureText
-                            ? Icons.remove_red_eye_outlined
-                            : Icons.remove_red_eye,
-                        color: Colors.white,
+                const SizedBox(
+                  height: 43,
+                ),
+                SizedBox(
+                  height: 50,
+                  child: TextField(
+                    controller: _email,
+                    style:
+                        const TextStyle(color: AppStyles.backgroundColorWhite),
+                    decoration: InputDecoration(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 30),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100.0),
                       ),
+                      filled: true,
+                      hintStyle: const TextStyle(
+                          color: AppStyles.backgroundColorWhite),
+                      hintText: "email",
+                      fillColor: AppStyles.primaryBgColor,
                     ),
-                    suffixIconColor: AppStyles.backgroundColorWhite,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(100.0),
-                    ),
-                    filled: true,
-                    hintStyle:
-                        const TextStyle(color: AppStyles.backgroundColorWhite),
-                    hintText: "password",
-                    fillColor: AppStyles.primaryBgColor,
                   ),
                 ),
-              ),
-              const SizedBox(
-                height: 43,
-              ),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      )
-                    : ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: const MaterialStatePropertyAll(
-                              AppStyles.buttonBgColorGreen),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  100.0), // Set your desired border radius here
+                const SizedBox(
+                  height: 43,
+                ),
+                SizedBox(
+                  height: 50,
+                  child: TextField(
+                    obscureText: _obscureText,
+                    controller: _password,
+                    style:
+                        const TextStyle(color: AppStyles.backgroundColorWhite),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _obscureText = !_obscureText;
+                          });
+                        },
+                        child: Icon(
+                          _obscureText
+                              ? Icons.remove_red_eye_outlined
+                              : Icons.remove_red_eye,
+                          color: Colors.white,
+                        ),
+                      ),
+                      suffixIconColor: AppStyles.backgroundColorWhite,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100.0),
+                      ),
+                      filled: true,
+                      hintStyle: const TextStyle(
+                          color: AppStyles.backgroundColorWhite),
+                      hintText: "password",
+                      fillColor: AppStyles.primaryBgColor,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 43,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator.adaptive(),
+                        )
+                      : ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: const MaterialStatePropertyAll(
+                                AppStyles.buttonBgColorGreen),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    100.0), // Set your desired border radius here
+                              ),
                             ),
                           ),
+                          onPressed: () async {
+                            await _registerUser();
+                          },
+                          child: const Text(
+                            'Register',
+                            style: TextStyle(
+                                color: AppStyles.backgroundColorWhite,
+                                fontSize: 18),
+                          ),
                         ),
-                        onPressed: () async {
-                          await _registerUser();
-                        },
-                        child: const Text(
-                          'Register',
-                          style: TextStyle(
-                              color: AppStyles.backgroundColorWhite,
-                              fontSize: 18),
-                        ),
-                      ),
-              ),
-              const SizedBox(
-                height: 43,
-              ),
-              TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, './login/');
-                  },
-                  child: const Text(
-                    'If you already have an account, login!',
-                    style: TextStyle(
-                        color: AppStyles.backgroundColorWhite, fontSize: 23),
-                    textAlign: TextAlign.center,
-                  ))
-            ],
+                ),
+                const SizedBox(
+                  height: 43,
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, './login/');
+                    },
+                    child: const Text(
+                      'If you already have an account, login!',
+                      style: TextStyle(
+                          color: AppStyles.backgroundColorWhite, fontSize: 23),
+                      textAlign: TextAlign.center,
+                    ))
+              ],
+            ),
           ),
         ),
       ),
