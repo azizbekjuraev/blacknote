@@ -31,7 +31,9 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           ReusableIconButton(
             iconData: Icons.search,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, './search-view/');
+            },
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -126,7 +128,7 @@ class _HomeViewState extends State<HomeView> {
                       onPressed: () {
                         Navigator.pushNamed(context, './create-view/');
                       },
-                      backgroundColor: AppStyles.primaryBgColor,
+                      // backgroundColor: AppStyles.primaryBgColor,
                       child: const Icon(
                         Icons.add,
                         color: AppStyles.backgroundColorWhite,

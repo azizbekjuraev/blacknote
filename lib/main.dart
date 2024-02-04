@@ -13,7 +13,6 @@ import './views/create_view.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   bool isLoggedIn = await SharedPreferencesHelper.isLoggedIn();
-  print(isLoggedIn);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp(
     isLoggedIn: isLoggedIn,
@@ -30,29 +29,38 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
-            scaffoldBackgroundColor: AppStyles.bgColorBlack,
-            textTheme: GoogleFonts.nunitoTextTheme(),
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: AppStyles.primaryBgColor,
-              primary: AppStyles.buttonBgColorGreen,
+          scaffoldBackgroundColor: AppStyles.bgColorBlack,
+          textTheme: GoogleFonts.nunitoTextTheme(),
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: AppStyles.primaryBgColor,
+            primary: AppStyles.buttonBgColorGreen,
+          ),
+          useMaterial3: true,
+          textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              foregroundColor: MaterialStateColor.resolveWith(
+                  (states) => Colors.transparent),
+              backgroundColor: MaterialStateColor.resolveWith(
+                  (states) => Colors.transparent),
+              shadowColor: MaterialStateColor.resolveWith(
+                  (states) => Colors.transparent),
             ),
-            useMaterial3: true,
-            textButtonTheme: TextButtonThemeData(
-              style: TextButton.styleFrom(
-                foregroundColor: MaterialStateColor.resolveWith(
-                    (states) => Colors.transparent),
-                backgroundColor: MaterialStateColor.resolveWith(
-                    (states) => Colors.transparent),
-                shadowColor: MaterialStateColor.resolveWith(
-                    (states) => Colors.transparent),
-              ),
-            )),
+          ),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
+            backgroundColor: AppStyles.bgColorBlack,
+          ),
+          dialogTheme: const DialogTheme(
+            shadowColor: AppStyles.backgroundColorWhite,
+            backgroundColor: AppStyles.bgColorBlack,
+          ),
+        ),
         home: isLoggedIn ? const HomeView() : const LoginView(),
         routes: {
           './login/': (context) => const LoginView(),
           './register/': (context) => const RegisterView(),
           './home-view/': (context) => const HomeView(),
           './create-view/': (context) => const CreateView(),
+          './search-view/': (context) => const SearchView(),
         });
   }
 }

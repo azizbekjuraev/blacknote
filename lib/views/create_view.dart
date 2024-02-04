@@ -17,6 +17,7 @@ class CreateView extends StatefulWidget {
 
 class _CreateViewState extends State<CreateView> {
   bool isLoading = false;
+  bool isEditing = false;
   late final TextEditingController _title;
   late final TextEditingController _content;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -130,13 +131,18 @@ class _CreateViewState extends State<CreateView> {
           title: ReusableIconButton(
             iconData: Icons.chevron_left_outlined,
             onPressed: () {
+              FocusScope.of(context).unfocus();
               Navigator.pop(context);
             },
           ),
           actions: [
             ReusableIconButton(
-              iconData: Icons.remove_red_eye_outlined,
-              onPressed: () {},
+              iconData: isEditing ? Icons.edit : Icons.remove_red_eye_outlined,
+              onPressed: () {
+                setState(() {
+                  isEditing = !isEditing;
+                });
+              },
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -157,6 +163,7 @@ class _CreateViewState extends State<CreateView> {
                 child: Column(
                   children: [
                     CustomTextField(
+                      readOnly: isEditing ? true : false,
                       controller: _title,
                       maxLength: 100,
                       maxLines: null,
@@ -165,6 +172,7 @@ class _CreateViewState extends State<CreateView> {
                       fontSize: 35,
                     ),
                     CustomTextField(
+                      readOnly: isEditing ? true : false,
                       controller: _content,
                       maxLines: null,
                       hintText: 'Type something...',

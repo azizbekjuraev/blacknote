@@ -1,8 +1,10 @@
 import 'package:blacknote/style/app_styles.dart';
+import 'package:blacknote/utils/show_toast.dart';
 import 'package:blacknote/views/edit_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:toastification/toastification.dart';
 
 class DisplayNotesUI extends StatelessWidget {
   const DisplayNotesUI({super.key});
@@ -122,55 +124,88 @@ class DisplayNotesUI extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppStyles.bgColorBlack,
-          title: const Text(
-            'Confirm Deletion',
-            style:
-                TextStyle(fontSize: 23, color: AppStyles.backgroundColorWhite),
-          ),
-          content: const Text(
-            'Are you sure you want to delete this note?',
-            style:
-                TextStyle(fontSize: 23, color: AppStyles.backgroundColorWhite),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                'Cancel',
-                style: TextStyle(
-                    color: AppStyles.backgroundColorWhite, fontSize: 18),
-              ),
-            ),
-            SizedBox(
-              width: 112,
-              height: 39,
-              child: FloatingActionButton(
-                autofocus: true,
-                foregroundColor: AppStyles.backgroundColorWhite,
-                splashColor: AppStyles.backgroundColorWhite,
-                backgroundColor: AppStyles.deleteBgColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(userUid)
-                      .collection('notes')
-                      .doc(noteId)
-                      .delete();
-                  isDeleted = true;
-                },
-                child: const Text(
-                  'Delete',
-                  style: TextStyle(fontSize: 18),
+          content: SizedBox(
+            width: 330,
+            height: 200,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.info,
+                  color: AppStyles.iconColor,
                 ),
-              ),
+                const SizedBox(height: 22),
+                const Text(
+                  textAlign: TextAlign.center,
+                  'Are you sure you want to delete this note?',
+                  style: TextStyle(
+                    color: AppStyles.backgroundColorWhite,
+                    fontSize: 23,
+                  ),
+                ),
+                const SizedBox(height: 22),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      width: 112,
+                      height: 39,
+                      child: FloatingActionButton(
+                        autofocus: true,
+                        foregroundColor: AppStyles.backgroundColorWhite,
+                        splashColor: AppStyles.backgroundColorWhite,
+                        backgroundColor: AppStyles.deleteBgColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          'Cancel',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 112,
+                      height: 39,
+                      child: FloatingActionButton(
+                        autofocus: true,
+                        foregroundColor: AppStyles.backgroundColorWhite,
+                        splashColor: AppStyles.backgroundColorWhite,
+                        backgroundColor: AppStyles.buttonBgColorGreen,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(userUid)
+                              .collection('notes')
+                              .doc(noteId)
+                              .delete();
+                          isDeleted = true;
+                          if (!context.mounted) return;
+                          showToast(
+                              context,
+                              title: "Done!",
+                              "You have successfully deleted your note!",
+                              toastType: ToastificationType.success,
+                              iconColor: AppStyles.buttonBgColorGreen,
+                              toastAlignment: Alignment.bottomCenter,
+                              margin: const EdgeInsets.only(bottom: 0.0));
+                        },
+                        child: const Text(
+                          'Delete',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         );
       },
     );

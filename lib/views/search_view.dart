@@ -13,17 +13,24 @@ class _SearchViewState extends State<SearchView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 100,
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         title: SizedBox(
           height: 50,
           child: TextField(
+            autofocus: true,
             style: const TextStyle(color: AppStyles.backgroundColorWhite),
             decoration: InputDecoration(
-              suffixIcon: const Icon(
-                Icons.close,
-                color: AppStyles.backgroundColorWhite,
+              suffixIcon: GestureDetector(
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                child: const Icon(
+                  Icons.close,
+                  color: AppStyles.backgroundColorWhite,
+                ),
               ),
               contentPadding: const EdgeInsets.symmetric(horizontal: 30),
               border: OutlineInputBorder(

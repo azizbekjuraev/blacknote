@@ -117,7 +117,7 @@ class _EditViewState extends State<EditView> {
                 iconData: Icons.save_outlined,
                 onPressed: () async {
                   // await updateNote();
-                  if (isEditing) {
+                  if (isNoteChanged()) {
                     showAlert(context,
                         updateNote: updateNote, greenBtnText: 'Save');
                   }
