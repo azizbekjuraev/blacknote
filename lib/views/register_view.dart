@@ -1,6 +1,7 @@
 import 'package:blacknote/state/shared_preferences.dart';
 import 'package:blacknote/style/app_styles.dart';
 import 'package:blacknote/utils/show_toast.dart';
+import 'package:blacknote/views/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:toastification/toastification.dart';
@@ -75,7 +76,8 @@ class _RegisterViewState extends State<RegisterView> {
           margin: const EdgeInsets.only(bottom: 0.0));
 
       SharedPreferencesHelper.setLoggedIn(true);
-      Navigator.pushReplacementNamed(context, './home-view/');
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => const HomeView()));
     } on FirebaseAuthException catch (e) {
       // Handle specific FirebaseAuthExceptions
       if (e.code == 'too-many-requests') {

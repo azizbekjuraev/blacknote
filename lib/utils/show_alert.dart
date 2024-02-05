@@ -5,13 +5,20 @@ void showAlert(BuildContext context,
     {Future<void> Function()? updateNote,
     String greenBtnText = 'Keep',
     String title = 'Save changes?'}) {
+  Size screenSize = MediaQuery.of(context).size;
+
+  double widgetWidth = screenSize.width;
+  double widgetHeight = (widgetWidth * 260) / 330;
+  double buttonWidth = MediaQuery.of(context).size.width * 0.30;
+  double buttonHeight = MediaQuery.of(context).size.height * 0.05;
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         content: SizedBox(
-          width: 330,
-          height: 200,
+          width: widgetWidth,
+          height: widgetHeight,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -33,8 +40,8 @@ void showAlert(BuildContext context,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   SizedBox(
-                    width: 112,
-                    height: 39,
+                    width: buttonWidth,
+                    height: buttonHeight,
                     child: FloatingActionButton(
                       autofocus: true,
                       foregroundColor: AppStyles.backgroundColorWhite,
@@ -59,8 +66,8 @@ void showAlert(BuildContext context,
                     ),
                   ),
                   SizedBox(
-                    width: 112,
-                    height: 39,
+                    width: buttonWidth,
+                    height: buttonHeight,
                     child: FloatingActionButton(
                       autofocus: true,
                       foregroundColor: AppStyles.backgroundColorWhite,

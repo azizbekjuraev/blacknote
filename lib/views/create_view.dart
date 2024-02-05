@@ -49,10 +49,8 @@ class _CreateViewState extends State<CreateView> {
       throw Exception("Color list is empty");
     }
 
-    // Generate a random index within the range of the colorList
     final randomIndex = Random().nextInt(colorList.length);
 
-    // Return the random color as a list of integers
     return colorList[randomIndex];
   }
 
@@ -68,16 +66,11 @@ class _CreateViewState extends State<CreateView> {
       DocumentReference userDocRef =
           _firestore.collection('users').doc(userUid);
 
-      // Your user data, including 'userId'
       Map<String, dynamic> userData = {
         'userId': userUid,
-        // Add any other fields you need for your user
       };
-
-      // Set the user data in the 'users' collection with the user's ID as the document ID
       await userDocRef.set(userData);
 
-      // Now, create a reference to the 'notes' subcollection under the 'users' document
       CollectionReference notesCollection = userDocRef.collection('notes');
 
       if (_title.text == "" || _content.text == "") {
@@ -182,7 +175,6 @@ class _CreateViewState extends State<CreateView> {
                 ),
               ),
             ),
-            // Loading Indicator and Dim Background
             if (isLoading)
               const Center(
                 child: CircularProgressIndicator.adaptive(),

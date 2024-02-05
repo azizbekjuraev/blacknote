@@ -98,7 +98,7 @@ class _EditViewState extends State<EditView> {
                 return Navigator.pop(context);
               } else {
                 showAlert(context,
-                    title: 'Are your sure you want discard your changes ?');
+                    title: 'Are your sure you want to discart this note?');
               }
             },
           ),

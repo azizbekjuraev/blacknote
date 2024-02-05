@@ -167,21 +167,23 @@ class _SearchViewState extends State<SearchView> {
                 visible: searchText.isEmpty,
                 child: Align(
                   alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/search_error.png'),
-                      const Text(
-                        'Start searching your notes.',
-                        style: TextStyle(
-                          color: AppStyles.backgroundColorWhite,
-                          fontSize: 20,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/search_error.png'),
+                        const Text(
+                          'Start searching your notes.',
+                          style: TextStyle(
+                            color: AppStyles.backgroundColorWhite,
+                            fontSize: 20,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                      ),
-                    ],
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.2,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               )
@@ -189,21 +191,23 @@ class _SearchViewState extends State<SearchView> {
                 visible: isNotMatched,
                 child: Align(
                   alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset('assets/search_error.png'),
-                      const Text(
-                        'Note not found. Try searching again.',
-                        style: TextStyle(
-                          color: AppStyles.backgroundColorWhite,
-                          fontSize: 20,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/search_error.png'),
+                        const Text(
+                          'Note not found. Try searching again.',
+                          style: TextStyle(
+                            color: AppStyles.backgroundColorWhite,
+                            fontSize: 20,
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.2,
-                      ),
-                    ],
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.2,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

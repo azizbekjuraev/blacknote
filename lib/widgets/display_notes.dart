@@ -119,15 +119,12 @@ class DisplayNotesUI extends StatelessWidget {
   Future<bool> deleteNote(BuildContext context, String noteId) async {
     String userUid = FirebaseAuth.instance.currentUser!.uid;
     bool isDeleted = false;
-
-    // Get the screen size
     Size screenSize = MediaQuery.of(context).size;
 
-    // Calculate the widget size based on a desired ratio (e.g., 330x220)
-    double widgetWidth =
-        screenSize.width; // Adjust this according to your design
+    double widgetWidth = screenSize.width;
     double widgetHeight = (widgetWidth * 220) / 330;
-
+    double buttonWidth = MediaQuery.of(context).size.width * 0.30;
+    double buttonHeight = MediaQuery.of(context).size.height * 0.05;
     await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -156,8 +153,8 @@ class DisplayNotesUI extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SizedBox(
-                      width: 112,
-                      height: 39,
+                      width: buttonWidth,
+                      height: buttonHeight,
                       child: FloatingActionButton(
                         autofocus: true,
                         foregroundColor: AppStyles.backgroundColorWhite,
@@ -175,8 +172,8 @@ class DisplayNotesUI extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      width: 112,
-                      height: 39,
+                      width: buttonWidth,
+                      height: buttonHeight,
                       child: FloatingActionButton(
                         autofocus: true,
                         foregroundColor: AppStyles.backgroundColorWhite,
