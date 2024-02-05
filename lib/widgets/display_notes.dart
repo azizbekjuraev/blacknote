@@ -120,13 +120,21 @@ class DisplayNotesUI extends StatelessWidget {
     String userUid = FirebaseAuth.instance.currentUser!.uid;
     bool isDeleted = false;
 
+    // Get the screen size
+    Size screenSize = MediaQuery.of(context).size;
+
+    // Calculate the widget size based on a desired ratio (e.g., 330x220)
+    double widgetWidth =
+        screenSize.width; // Adjust this according to your design
+    double widgetHeight = (widgetWidth * 220) / 330;
+
     await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           content: SizedBox(
-            width: 330,
-            height: 200,
+            width: widgetWidth,
+            height: widgetHeight,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
