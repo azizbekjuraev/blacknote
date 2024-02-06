@@ -6,6 +6,7 @@ import 'package:blacknote/widgets/reusable_icon_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:toastification/toastification.dart';
 
 class CreateView extends StatefulWidget {
@@ -21,6 +22,7 @@ class _CreateViewState extends State<CreateView> {
   late final TextEditingController _title;
   late final TextEditingController _content;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  DateTime dateTime = DateTime.now();
 
   @override
   void initState() {
@@ -83,11 +85,14 @@ class _CreateViewState extends State<CreateView> {
             margin: const EdgeInsets.only(bottom: 0.0));
         return;
       } else {
+        String createdAt = DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
         List<int> randomColor = getRandomColor(myColors);
+
         Map<String, dynamic> noteData = {
           'title': _title.text,
           'content': _content.text,
           'container_color': randomColor,
+          'created_at': createdAt,
         };
 
         // Add the note data to the 'notes' subcollection

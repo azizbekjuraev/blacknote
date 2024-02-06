@@ -111,55 +111,59 @@ class _SearchViewState extends State<SearchView> {
           visible: searchText.isNotEmpty,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Positioned(
-                top: 0,
-                width: MediaQuery.of(context).size.width,
-                height: 400,
-                child: ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    List<double> colorValues =
-                        (items[index]['container_color'] as List<dynamic>?)
-                                ?.map((value) => (value as num).toDouble())
-                                .toList() ??
-                            [255.0, 255.0, 255.0, 1.0];
+            child: Stack(
+              children: [
+                Positioned(
+                    top: 0,
+                    width: MediaQuery.of(context).size.width,
+                    height: 400,
+                    child: ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        List<double> colorValues =
+                            (items[index]['container_color'] as List<dynamic>?)
+                                    ?.map((value) => (value as num).toDouble())
+                                    .toList() ??
+                                [255.0, 255.0, 255.0, 1.0];
 
-                    Color containerColor = Color.fromRGBO(
-                      colorValues[0].toInt(),
-                      colorValues[1].toInt(),
-                      colorValues[2].toInt(),
-                      colorValues[3],
-                    );
-                    return Card(
-                      color: containerColor,
-                      elevation: 0,
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: ListTile(
-                          horizontalTitleGap: 3.0,
-                          title: Text(
-                            items[index]['title'],
-                            style: const TextStyle(fontSize: 25),
-                          ),
-                          onTap: () {
-                            String documentId = originalItems[index].id;
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditView(noteData: [
-                                  items[index]['title'],
-                                  items[index]['content'],
-                                  documentId,
-                                ]),
+                        Color containerColor = Color.fromRGBO(
+                          colorValues[0].toInt(),
+                          colorValues[1].toInt(),
+                          colorValues[2].toInt(),
+                          colorValues[3],
+                        );
+                        return Card(
+                          color: containerColor,
+                          elevation: 0,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: ListTile(
+                              horizontalTitleGap: 3.0,
+                              title: Text(
+                                items[index]['title'],
+                                style: const TextStyle(fontSize: 25),
                               ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                )),
+                              onTap: () {
+                                String documentId = originalItems[index].id;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditView(noteData: [
+                                      items[index]['title'],
+                                      items[index]['content'],
+                                      documentId,
+                                    ]),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    )),
+              ],
+            ),
           ),
         ),
         searchText.isEmpty

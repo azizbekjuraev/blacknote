@@ -32,6 +32,11 @@ class DisplayNotesUI extends StatelessWidget {
                     List<Map<String, dynamic>> notes = snapshot.data!.docs
                         .map((doc) => (doc.data() as Map<String, dynamic>))
                         .toList();
+                    notes.sort((a, b) {
+                      DateTime timeA = DateTime.parse(a['created_at']);
+                      DateTime timeB = DateTime.parse(b['created_at']);
+                      return timeB.compareTo(timeA);
+                    });
                     return ListView.builder(
                       itemCount: notes.length,
                       itemBuilder: (context, index) {
