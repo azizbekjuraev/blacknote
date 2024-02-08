@@ -121,70 +121,73 @@ class _CreateViewState extends State<CreateView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          toolbarHeight: 60,
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          title: ReusableIconButton(
-            iconData: Icons.chevron_left_outlined,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        toolbarHeight: 60,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        title: ReusableIconButton(
+          iconData: Icons.chevron_left_outlined,
+          onPressed: () {
+            FocusScope.of(context).unfocus();
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          ReusableIconButton(
+            iconData: isEditing ? Icons.edit : Icons.remove_red_eye_outlined,
             onPressed: () {
-              FocusScope.of(context).unfocus();
-              Navigator.pop(context);
+              setState(() {
+                isEditing = !isEditing;
+              });
             },
           ),
-          actions: [
-            ReusableIconButton(
-              iconData: isEditing ? Icons.edit : Icons.remove_red_eye_outlined,
-              onPressed: () {
-                setState(() {
-                  isEditing = !isEditing;
-                });
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ReusableIconButton(
+              iconData: Icons.save_outlined,
+              onPressed: () async {
+                await addNote();
               },
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ReusableIconButton(
-                iconData: Icons.save_outlined,
-                onPressed: () async {
-                  await addNote();
-                },
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  CustomTextField(
+                    readOnly: isEditing ? true : false,
+                    controller: _title,
+                    maxLength: 100,
+                    maxLines: null,
+                    autofocus: true,
+                    hintText: 'Title',
+                    fontSize: 35,
+                  ),
+                  CustomTextField(
+                    readOnly: isEditing ? true : false,
+                    controller: _content,
+                    maxLines: null,
+                    hintText: 'Type something...',
+                    fontSize: 23,
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-        body: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    CustomTextField(
-                      readOnly: isEditing ? true : false,
-                      controller: _title,
-                      maxLength: 100,
-                      maxLines: null,
-                      autofocus: true,
-                      hintText: 'Title',
-                      fontSize: 35,
-                    ),
-                    CustomTextField(
-                      readOnly: isEditing ? true : false,
-                      controller: _content,
-                      maxLines: null,
-                      hintText: 'Type something...',
-                      fontSize: 23,
-                    ),
-                  ],
-                ),
-              ),
+          ),
+          if (isLoading)
+            const Center(
+              child: CircularProgressIndicator.adaptive(),
             ),
-            if (isLoading)
-              const Center(
-                child: CircularProgressIndicator.adaptive(),
-              ),
-          ],
-        ));
+        ],
+      ),
+      backgroundColor:
+          isLoading ? AppStyles.primaryBgColor : AppStyles.bgColorBlack,
+    );
   }
 }

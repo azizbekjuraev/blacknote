@@ -114,10 +114,8 @@ class _SearchViewState extends State<SearchView> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Stack(
               children: [
-                Positioned(
+                Positioned.fill(
                     top: 0,
-                    width: MediaQuery.of(context).size.width,
-                    height: 400,
                     child: ListView.builder(
                       itemCount: items.length,
                       itemBuilder: (context, index) {
